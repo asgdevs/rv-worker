@@ -1,0 +1,31 @@
+# wrangler.toml configuration for Profound Log Collector Worker
+
+# Name of your worker
+name = "rv-worker"
+
+# Entry point for your worker code (JavaScript file)
+main = "src/index.js"
+
+# Compatibility date - ensures your worker runs with a specific version of the Workers runtime
+# It's recommended to use a recent date.
+compatibility_date = "2024-06-02"
+
+# Route binding: This tells Cloudflare which traffic should trigger your worker.
+# !!! IMPORTANT: You MUST replace these placeholder values with your actual domain details !!!
+routes = [
+  { pattern = "rvheat.com/*", zone_name = "rvheat.com" }
+  # Example: If your site is www.example.com, use:
+  # { pattern = "example.com/*", zone_name = "example.com" }
+  # The zone_name is usually your root domain without 'www'.
+]
+
+# Environment variables accessible within the worker code
+[vars]
+PROFOUND_API_URL = "https://artemis.api.tryprofound.com/v1/logs/cloudflare_worker"
+PROFOUND_API_KEY = "bot_dfa07d82-dbe7-4185-b66b-05478e2cf8cc"
+
+# Note on Secrets:
+# The PROFOUND_API_KEY is sensitive and MUST be configured as a secret,
+# not placed directly in this file.
+# Use the command: wrangler secret put PROFOUND_API_KEY
+# You will be prompted to enter the key securely.
